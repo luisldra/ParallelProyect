@@ -19,8 +19,10 @@ def parse_args():
     parser.add_argument("--estrategia", type=str, choices=["secuencial", "hilos", "multiprocessing", "mpi"], required=True, help="Paralelización a utilizar")
     parser.add_argument("--filter", type=int, default=128, help="Filter size")
     parser.add_argument("--num_cores", type=int, default=os.cpu_count(), help="Número de núcleos a utilizar para multiprocessing")
+    parser.add_argument("--num_threads", type=int, default=4, help="Número de hilos a utilizar")
     parser.add_argument("--median_filter_size", type=int, default=3, help="Tamaño del filtro de mediana")
     return parser.parse_args()
+
 
 def visualize_dotplot(dotplot, estrategia):
     try:
@@ -114,7 +116,7 @@ def main():
     if args.estrategia == "secuencial":
         fill_dotplot_secuencial(Secuencia1, Secuencia2, dotplot)
     elif args.estrategia == "hilos":
-        fill_dotplot_hilos(Secuencia1, Secuencia2, dotplot)
+        fill_dotplot_hilos(Secuencia1, Secuencia2, dotplot, args.num_threads)
     elif args.estrategia == "multiprocessing":
         fill_dotplot_multiprocessing(Secuencia1, Secuencia2, dotplot, args.num_cores)
     elif args.estrategia == "mpi":

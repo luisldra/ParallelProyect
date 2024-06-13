@@ -1,0 +1,9 @@
+{
+    "hilos": {
+        "carga_datos": 0.7080967426300049,
+        "ejecucion": 0.22501492500305176,
+        "visualizacion": 0.25388431549072266,
+        "total": 1.1869959831237793,
+        "num_processes": 1
+    }
+}
