@@ -1,25 +1,30 @@
-from multiprocessing import Process, Array
 import numpy as np
+from multiprocessing import Pool
 
-def fill_dotplot_multiprocessing(Secuencia1, Secuencia2, dotplot):
-    def worker(start, end, dotplot, Secuencia1, Secuencia2):
-        for i in range(start, end):
-            for j in range(len(Secuencia2)):
-                dotplot[i * len(Secuencia2) + j] = 1 if Secuencia1[i] == Secuencia2[j] else 0
+def compare_sequences(args):
+    seq1_chunk, seq2 = args
+    chunk_size = len(seq1_chunk)
+    dotplot_chunk = np.zeros((chunk_size, len(seq2)), dtype=np.uint8)
+    for i in range(chunk_size):
+        for j in range(len(seq2)):
+            dotplot_chunk[i, j] = 1 if seq1_chunk[i] == seq2[j] else 0
+    return dotplot_chunk
 
-    n_processes = 4
-    chunk_size = len(Secuencia1) // n_processes
-    dotplot = Array('B', len(Secuencia1) * len(Secuencia2), lock=False)
-    processes = []
+def fill_dotplot_multiprocessing(seq1, seq2, dotplot, num_cores):
+    chunk_size = len(seq1) // num_cores
 
-    for n in range(n_processes):
-        start = n * chunk_size
-        end = (n + 1) * chunk_size if n != n_processes - 1 else len(Secuencia1)
-        process = Process(target=worker, args=(start, end, dotplot, Secuencia1, Secuencia2))
-        processes.append(process)
-        process.start()
-
-    for process in processes:
-        process.join()
+    # Crear fragmentos de la secuencia 1 para distribuir entre los procesos
+    seq1_chunks = [seq1[i * chunk_size: (i + 1) * chunk_size] for i in range(num_cores)]
     
-    dotplot = np.frombuffer(dotplot.get_obj(), dtype=np.uint8).reshape((len(Secuencia1), len(Secuencia2)))
+    # Si hay restos, añadirlos al último fragmento
+    if len(seq1) % num_cores != 0:
+        seq1_chunks[-1].extend(seq1[num_cores * chunk_size:])
+
+    with Pool(num_cores) as pool:
+        results = pool.map(compare_sequences, [(chunk, seq2) for chunk in seq1_chunks])
+
+    # Combina los resultados en el dotplot original
+    start_row = 0
+    for result in results:
+        dotplot[start_row:start_row + result.shape[0], :] = result
+        start_row += result.shape[0]

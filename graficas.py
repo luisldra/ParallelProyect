@@ -28,13 +28,16 @@ def plot_speedup_and_efficiency(data):
     plt.xlabel('Estrategia')
     plt.ylabel('Aceleración')
     plt.title('Aceleración')
+    plt.xticks(rotation=45, ha='right')
 
     plt.subplot(1, 2, 2)
     plt.bar(strategies, efficiencies)
     plt.xlabel('Estrategia')
     plt.ylabel('Eficiencia')
     plt.title('Eficiencia')
+    plt.xticks(rotation=45, ha='right')
 
+    plt.tight_layout()
     plt.savefig('speedup_and_efficiency.png')
     plt.close()
 
@@ -56,6 +59,8 @@ def plot_execution_times(data):
     plt.xlabel('Estrategia')
     plt.ylabel('Tiempo (s)')
     plt.title('Tiempos de Ejecución')
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
     plt.savefig('execution_times.png')
     plt.close()
 

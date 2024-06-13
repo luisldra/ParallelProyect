@@ -4,6 +4,7 @@ import time
 import matplotlib.pyplot as plt
 from mpi4py import MPI
 import json
+import os
 from utils import merge_sequences_from_fasta
 from secuencial import fill_dotplot_secuencial
 from hilos import fill_dotplot_hilos
@@ -16,6 +17,7 @@ def parse_args():
     parser.add_argument("--file2", type=str, required=True, help="Path to the second FASTA file")
     parser.add_argument("--estrategia", type=str, choices=["secuencial", "hilos", "multiprocessing", "mpi"], required=True, help="Paralelización a utilizar")
     parser.add_argument("--filter", type=int, default=128, help="Filter size")
+    parser.add_argument("--num_cores", type=int, default=os.cpu_count(), help="Número de núcleos a utilizar para multiprocessing")
     return parser.parse_args()
 
 def visualize_dotplot(dotplot, estrategia):
@@ -34,10 +36,10 @@ def visualize_dotplot(dotplot, estrategia):
 def save_times(data, estrategia, tiempos, num_processes):
     if estrategia not in data:
         data[estrategia] = {}
-    if estrategia == 'mpi':
-        if num_processes not in data[estrategia]:
-            data[estrategia][num_processes] = []
-        data[estrategia][num_processes] = {
+    if estrategia == 'mpi' or estrategia == 'multiprocessing':
+        if str(num_processes) not in data[estrategia]:
+            data[estrategia][str(num_processes)] = {}
+        data[estrategia][str(num_processes)] = {
             "carga_datos": tiempos["carga_datos"],
             "ejecucion": tiempos["ejecucion"],
             "visualizacion": tiempos["visualizacion"],
@@ -111,7 +113,7 @@ def main():
     elif args.estrategia == "hilos":
         fill_dotplot_hilos(Secuencia1, Secuencia2, dotplot)
     elif args.estrategia == "multiprocessing":
-        fill_dotplot_multiprocessing(Secuencia1, Secuencia2, dotplot)
+        fill_dotplot_multiprocessing(Secuencia1, Secuencia2, dotplot, args.num_cores)
     elif args.estrategia == "mpi":
         dotplot = fill_dotplot_mpi(Secuencia1, Secuencia2)
     tiempos['ejecucion'] = time.time() - start_time
@@ -134,7 +136,8 @@ def main():
         data = load_times()
 
         # Guardar los nuevos tiempos
-        save_times(data, args.estrategia, tiempos, size if args.estrategia == 'mpi' else 1)
+        num_processes = args.num_cores if args.estrategia == 'multiprocessing' else size if args.estrategia == 'mpi' else 1
+        save_times(data, args.estrategia, tiempos, num_processes)
 
 if __name__ == "__main__":
     main()
