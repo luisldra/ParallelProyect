@@ -1,0 +1,39 @@
+{
+    "secuencial": {
+        "carga_datos": 0.08855533599853516,
+        "ejecucion": 1102.205001115799,
+        "visualizacion": 115.27487897872925,
+        "total": 1217.5684354305267,
+        "num_processes": 1
+    },
+    "mpi": {
+        "4": {
+            "carga_datos": 0.13252973556518555,
+            "ejecucion": 111.6589343547821,
+            "visualizacion": 30.277151107788086,
+            "total": 142.06861519813538,
+            "num_processes": 4
+        },
+        "3": {
+            "carga_datos": 0.12739801406860352,
+            "ejecucion": 130.01074600219727,
+            "visualizacion": 29.976078033447266,
+            "total": 160.11422204971313,
+            "num_processes": 3
+        },
+        "2": {
+            "carga_datos": 0.1087954044342041,
+            "ejecucion": 168.57922649383545,
+            "visualizacion": 29.588377475738525,
+            "total": 198.27639937400818,
+            "num_processes": 2
+        },
+        "1": {
+            "carga_datos": 0.10650777816772461,
+            "ejecucion": 285.43673038482666,
+            "visualizacion": 29.854297637939453,
+            "total": 315.39753580093384,
+            "num_processes": 1
+        }
+    }
+}

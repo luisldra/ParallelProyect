@@ -10,6 +10,7 @@ from secuencial import fill_dotplot_secuencial
 from hilos import fill_dotplot_hilos
 from multiprocessing_fill import fill_dotplot_multiprocessing
 from mpi_fill import fill_dotplot_mpi
+from filtro import apply_filter_and_detect_lines  # Importar la función de filtrado
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Dotplot Generator")
@@ -18,6 +19,7 @@ def parse_args():
     parser.add_argument("--estrategia", type=str, choices=["secuencial", "hilos", "multiprocessing", "mpi"], required=True, help="Paralelización a utilizar")
     parser.add_argument("--filter", type=int, default=128, help="Filter size")
     parser.add_argument("--num_cores", type=int, default=os.cpu_count(), help="Número de núcleos a utilizar para multiprocessing")
+    parser.add_argument("--median_filter_size", type=int, default=3, help="Tamaño del filtro de mediana")
     return parser.parse_args()
 
 def visualize_dotplot(dotplot, estrategia):
@@ -30,6 +32,7 @@ def visualize_dotplot(dotplot, estrategia):
         plt.savefig(output_file)
         plt.close()
         print(f"Dotplot saved as {output_file}")
+        return output_file
     except Exception as e:
         print(f"Error visualizing dotplot: {e}")
 
@@ -124,7 +127,7 @@ def main():
         # Visualizar el dotplot
         start_time = time.time()
         if dotplot is not None:
-            visualize_dotplot(dotplot, args.estrategia)
+            dotplot_path = visualize_dotplot(dotplot, args.estrategia)
         tiempos['visualizacion'] = time.time() - start_time
 
         # Calcular tiempos totales y tiempos muertos
@@ -138,6 +141,11 @@ def main():
         # Guardar los nuevos tiempos
         num_processes = args.num_cores if args.estrategia == 'multiprocessing' else size if args.estrategia == 'mpi' else 1
         save_times(data, args.estrategia, tiempos, num_processes)
+
+        # Aplicar el filtro y detectar líneas diagonales
+        if dotplot_path:
+            filtered_image_path = f"filtered_{args.estrategia}.png"
+            apply_filter_and_detect_lines(dotplot_path, filtered_image_path, filter_size=args.median_filter_size)
 
 if __name__ == "__main__":
     main()

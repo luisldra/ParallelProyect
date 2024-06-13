@@ -11,6 +11,9 @@ Este proyecto es una herramienta para generar dotplots a partir de secuencias de
 - mpi4py
 - numpy
 - matplotlib
+- argparse
+- json
+- os
 
 ## Instalación
 
@@ -40,11 +43,25 @@ python dotplot_generator.py --file1 <path_to_first_fasta_file> --file2 <path_to_
 - `--file2`: Ruta al segundo archivo FASTA.
 - `--estrategia`: Estrategia de paralelización a utilizar (`secuencial`, `hilos`, `multiprocessing`, `mpi`).
 - `--filter`: Tamaño del filtro (opcional, por defecto es 128).
+- `num_cores`: Número de núcleos a utilizar para multiprocessing (opcional, por defecto el número de núcleos disponibles).
 
 ### Ejemplo de uso
 
+
 ```bash
 python dotplot_generator.py --file1 secuencia1.fasta --file2 secuencia2.fasta --estrategia secuencial --filter 128
+
+secuencial:
+python3 proyecto.py --file1="secuencia1.fasta" --file2="secuencia2.fasta" --estrategia=secuencial --filter=10000
+
+mpi:
+mpirun -n 1 python3 proyecto.py --file1="secuencia1.fasta" --file2="secuencia2.fasta" --estrategia=mpi 
+--filter=10000
+
+
+multiprocessing:
+python3 proyecto.py --file1="secuencia1.fasta" --file2="secuencia2.fasta" --estrategia=multiprocessing --filter=10000 --num_cores=2
+
 ```
 
 ### Estrategias de paralelización
@@ -55,6 +72,7 @@ El programa soporta las siguientes estrategias de paralelización:
 2. `hilos`: Uso de múltiples hilos para el llenado del dotplot.
 3. `multiprocessing`: Uso de múltiples procesos para el llenado del dotplot.
 4. `mpi`: Uso de MPI (Message Passing Interface) para distribuir la carga de trabajo entre múltiples nodos.
+5. `PyCuda`: Uso de GPU (Recomendado trabajar en Colab)
 
 ## Estructura del código
 
@@ -77,6 +95,10 @@ El programa incluye manejo de errores para:
 ## Salida
 
 El programa genera un archivo PNG con el dotplot generado. El archivo se guarda con el nombre `dotplot_<estrategia>.png` en el directorio actual.
+
+Los tiempos de ejecución y otros tiempos relevantes se guardan en un archivo JSON.
+
+La imagen resultante del filtro se guarda como filtered_<estrategia>.png.
 
 ## Contribuciones
 

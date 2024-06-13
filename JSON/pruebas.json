@@ -1,0 +1,76 @@
+{
+    "secuencial": {
+        "carga_datos": 0.1113274097442627,
+        "ejecucion": 45.34779953956604,
+        "visualizacion": 1.8736939430236816,
+        "total": 47.332820892333984,
+        "num_processes": 1
+    },
+    "pycuda": {
+        "carga_datos": 0.10214638710021973,
+        "ejecucion": 0.17316460609436035,
+        "visualizacion": 0.9027683734893799,
+        "total": 1.17807936668396,
+        "num_processes": 1
+    },
+    "mpi": {
+        "1": {
+            "carga_datos": 0.10613894462585449,
+            "ejecucion": 19.364558696746826,
+            "visualizacion": 1.972383975982666,
+            "total": 21.443081617355347,
+            "num_processes": 1
+        },
+        "2": {
+            "carga_datos": 0.09821105003356934,
+            "ejecucion": 12.791275978088379,
+            "visualizacion": 2.037135362625122,
+            "total": 14.92662239074707,
+            "num_processes": 2
+        },
+        "3": {
+            "carga_datos": 0.1100311279296875,
+            "ejecucion": 9.459179162979126,
+            "visualizacion": 2.010798215866089,
+            "total": 11.580008506774902,
+            "num_processes": 3
+        },
+        "4": {
+            "carga_datos": 0.09799647331237793,
+            "ejecucion": 8.176601886749268,
+            "visualizacion": 2.0078442096710205,
+            "total": 10.282442569732666,
+            "num_processes": 4
+        }
+    },
+    "multiprocessing": {
+        "1": {
+            "carga_datos": 0.08780360221862793,
+            "ejecucion": 136.3670778274536,
+            "visualizacion": 2.0000076293945312,
+            "total": 138.45488905906677,
+            "num_processes": 1
+        },
+        "2": {
+            "carga_datos": 0.0943906307220459,
+            "ejecucion": 68.40209126472473,
+            "visualizacion": 1.9967780113220215,
+            "total": 70.4932599067688,
+            "num_processes": 2
+        },
+        "3": {
+            "carga_datos": 0.14869093894958496,
+            "ejecucion": 19.296661853790283,
+            "visualizacion": 1.9931960105895996,
+            "total": 21.438548803329468,
+            "num_processes": 3
+        },
+        "4": {
+            "carga_datos": 0.1045687198638916,
+            "ejecucion": 12.58194875717163,
+            "visualizacion": 1.9900941848754883,
+            "total": 14.67661166191101,
+            "num_processes": 4
+        }
+    }
+}
